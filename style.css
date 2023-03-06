@@ -1,4 +1,5 @@
-@import url("https://use.typekit.net/jmk3xov.css");
+@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&display=swap');
 
 canvas {
   position: fixed;
@@ -8,10 +9,10 @@ canvas {
 
 
 :root {
-  --dark-bg: rgba(15, 15, 15, 0.95);
+  
   --spacing: 350px;
 
-  font-family: brandon-grotesque, sans-serif;
+  font-family: 'Fragment Mono', monospace;
   font-weight: 400;
   font-style: normal;
 }
@@ -31,8 +32,7 @@ main {
 }
 
 h1, h2, h3, blockquote {
-  font-family: elevon, sans-serif;
-  font-weight: 700;
+  font-family: 'Syncopate', sans-serif;
   font-style: normal;
 }
 
@@ -46,7 +46,7 @@ canvas {
 
   header {
     background: var(--dark-bg);
-    grid-column: 2 / span 5;
+    grid-column: 2 / span 6;
     font-size: 2.5rem;
     padding: 2rem;
     margin-bottom: var(--spacing);

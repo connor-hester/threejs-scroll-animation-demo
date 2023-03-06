@@ -1,6 +1,8 @@
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 
 // Setup
 
@@ -25,27 +27,57 @@ const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
 const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
 const torus = new THREE.Mesh(geometry, material);
 
-scene.add(torus);
+//scene.add(torus);
 
 // Lights
 
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(5, 5, 5);
 
+const pointLight2= new THREE.PointLight(0xffffff);
+pointLight2.position.set(0,2,15);
+
 const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(pointLight, ambientLight);
+scene.add(pointLight, ambientLight, pointLight2);
 
 // Helpers
 
-// const lightHelper = new THREE.PointLightHelper(pointLight)
-// const gridHelper = new THREE.GridHelper(200, 50);
-// scene.add(lightHelper, gridHelper)
+//const lightHelper = new THREE.PointLightHelper(pointLight)
+//const gridHelper = new THREE.GridHelper(200, 50);
+//scene.add(lightHelper, gridHelper)
 
-// const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+scene.add(controls);
+//Models
+const loader = new GLTFLoader();
+
+loader.load( 'models/CRTTVMODEL.gltf', function ( gltf ) {
+
+	scene.add( gltf.scene );
+  gltf.scene.rotation.y=-90;
+  gltf.scene.position.x=-2.75;
+  gltf.scene.position.y=-0.45;
+  gltf.scene.position.z=15;
+  //gltf.scene.scale(10,10);
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+
+//Video
+const video1 = document.getElementById( 'video1' );
+const vidTexture = new THREE.VideoTexture( video1 );
+const vid1 = new THREE.Mesh(new THREE.BoxGeometry(16, 9, 3), new THREE.MeshBasicMaterial({ map: vidTexture }));
+vid1.position.x=-2.75;
+vid1.position.y=-0.45;
+vid1.position.z=15;
+scene.add(vid1);
 
 function addStar() {
-  const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const geometry = new THREE.SphereGeometry(0.15, 24, 24);
+  const material = new THREE.MeshStandardMaterial({ color: 0x000000 });
   const star = new THREE.Mesh(geometry, material);
 
   const [x, y, z] = Array(3)
@@ -60,16 +92,16 @@ Array(200).fill().forEach(addStar);
 
 // Background
 
-const spaceTexture = new THREE.TextureLoader().load('space.jpg');
+const spaceTexture = new THREE.TextureLoader().load('sceneBackground.jpeg');
 scene.background = spaceTexture;
 
 // Avatar
 
 const jeffTexture = new THREE.TextureLoader().load('jeff.png');
 
-const jeff = new THREE.Mesh(new THREE.BoxGeometry(3, 3, 3), new THREE.MeshBasicMaterial({ map: jeffTexture }));
+const jeff = new THREE.Mesh(new THREE.BoxGeometry(5, 4, 3), new THREE.MeshBasicMaterial({ map: jeffTexture }));
 
-scene.add(jeff);
+//scene.add(jeff);
 
 // Moon
 
@@ -89,23 +121,23 @@ scene.add(moon);
 moon.position.z = 30;
 moon.position.setX(-10);
 
-jeff.position.z = -5;
+jeff.position.z = 10;
 jeff.position.x = 2;
 
 // Scroll Animation
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
-  moon.rotation.x += 0.05;
-  moon.rotation.y += 0.075;
-  moon.rotation.z += 0.05;
+  // moon.rotation.x += 0.05;
+  // moon.rotation.y += 0.075;
+  // moon.rotation.z += 0.05;
 
-  jeff.rotation.y += 0.01;
-  jeff.rotation.z += 0.01;
+  // jeff.rotation.y += 0.01;
+  // jeff.rotation.z += 0.01;
 
   camera.position.z = t * -0.01;
-  camera.position.x = t * -0.0002;
-  camera.rotation.y = t * -0.0002;
+  //camera.position.x = t * -0.0002;
+  //camera.rotation.y = t * -0.0002;
 }
 
 document.body.onscroll = moveCamera;
@@ -119,10 +151,11 @@ function animate() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.005;
   torus.rotation.z += 0.01;
+  //video1.update()
 
-  moon.rotation.x += 0.005;
+  //moon.rotation.x += 0.005;
 
-  // controls.update();
+   controls.update();
 
   renderer.render(scene, camera);
 }
